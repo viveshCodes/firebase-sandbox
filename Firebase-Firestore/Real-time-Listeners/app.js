@@ -2,7 +2,7 @@ const list = document.querySelector('ul');
 const form = document.querySelector('form');
 
 
-// function to add recipe 
+// add recipe to html template 
 const addRecipe = (recipe , id) =>{
     let time = recipe.created_at.toDate();
     let html = `
@@ -16,21 +16,28 @@ const addRecipe = (recipe , id) =>{
   list.innerHTML += html;
 }
 
-//getting collection from database
-db.collection('recipes').get()           // our database name in firestore setup
-    .then(snapshot =>{
-        // when we have data
-        snapshot.docs.forEach(doc => {
-            console.log(doc.id);
+// delete recipe from html template
+const deleteRecipe = (id) =>{
+    const recipes = document.querySelectorAll('li');
+    recipes.forEach(recipe =>{
+        if(recipe.getAttribute('data-id') === id){
+            recipe.remove();
+        }
+    })
+}
+//getting recipes from database
+db.collection('recipes').onSnapshot(snapshot =>{
+    snapshot.docChanges().forEach(change =>{
+        const doc = change.doc;
+        if(change.type === 'added'){
             addRecipe(doc.data() , doc.id);
-        });
+        } else {
+            deleteRecipe(doc.id);
+        }
+    })
+});
 
-    }).catch(err=>{
-        // when we have error
-        console.log(err);
-    });
-
-// add documents
+// add documents to database
 form.addEventListener('submit' , event =>{
     event.preventDefault();
 
@@ -48,7 +55,7 @@ form.addEventListener('submit' , event =>{
         }));
 });
 
-// delete button eventListener
+// delete from database
 list.addEventListener('click' , event =>{
     console.log(event);
     if(event.target.tagName === 'BUTTON'){
