@@ -1,4 +1,6 @@
 const list = document.querySelector('ul');
+const form = document.querySelector('form');
+
 
 // function to add recipe 
 const addRecipe = (recipe) =>{
@@ -25,3 +27,21 @@ db.collection('recipes').get()           // our database name in firestore setup
         // when we have error
         console.log(err);
     });
+
+// add documents
+form.addEventListener('submit' , event =>{
+    event.preventDefault();
+
+    const now = new Date();
+    const recipe = {
+        title :form.recipe.value,
+        created_at: firebase.firestore.Timestamp.fromDate(now)
+    }
+    form.reset();
+    db.collection('recipes').add(recipe)
+        .then(()=>{
+            console.log("Recipe added.");
+        }).catch((err =>{
+            console.log(err);
+        }));
+});
