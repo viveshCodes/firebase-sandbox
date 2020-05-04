@@ -54,7 +54,7 @@ list.addEventListener('click' , event =>{
     if(event.target.tagName === 'BUTTON'){
         const id = event.target.parentElement.getAttribute('data-id');
        db.collection('recipes').doc(id).delete()    // .doc() method is used to get reference to document we want to delete
-       // we have passed 'id' as argument id doc() to get reference to document with this id
+       // we have passed 'id' as argument in doc() to get reference to document with this id
         .then(()=>{
             console.log("recipe deleted");
         }).catch((err)=>{
