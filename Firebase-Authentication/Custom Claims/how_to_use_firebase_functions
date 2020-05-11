@@ -1,0 +1,10 @@
+### Install firebase tools with this command:
+    ```npm install firebase-tools -g ```
+
+
+### Initialize firebase functions in our project :
+      ``` firebase init functions ```
+
+
+### Deploy on firebase:
+      ``` firebase deploy --only functions ```      
